@@ -29,4 +29,17 @@ public class RecipesController : ControllerBase
     return BadRequest(e.Message);
     }
   }
+
+  [HttpGet("{recipeId}")]
+  public ActionResult<Recipe> GetOne(int recipeId)
+  {
+    try {
+      Recipe recipe = _recipesService.GetOne(recipeId);
+      return Ok(recipe);
+    }
+    catch (Exception e)
+    {
+    return BadRequest(e.Message);
+    }
+  }
 }

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace AllSpice.Services;
 
 public class RecipesService
@@ -18,5 +13,12 @@ public class RecipesService
   {
     List<Recipe> recipes = _repo.GetAllRecipes();
     return recipes;
+  }
+
+  internal Recipe GetOne(int recipeId)
+  {
+Recipe recipe = _repo.GetOne(recipeId);
+if (recipe == null) throw new Exception($"There is no recipe with this ID {recipeId}");
+return recipe;
   }
 }

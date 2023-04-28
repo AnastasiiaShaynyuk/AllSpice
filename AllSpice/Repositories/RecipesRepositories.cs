@@ -14,6 +14,26 @@ public class RecipesRepositories
     _db = db;
   }
 
+  internal Recipe CreateRecipe(Recipe recipeData)
+  {
+    string sql = @"
+    INSERT INTO recipes
+    (title, instruction, img, category, creatorId)
+    VALUES
+    (@Title, @Instruction, @Img, @Category, @CreatorId);
+
+    SELECT LAST_INSERT_ID()
+    ;";
+
+
+    int id = _db.ExecuteScalar<int>(sql, recipeData);
+    recipeData.Id = id;
+    recipeData.CreatedAt = DateTime.Now;
+    recipeData.UpdatedAt = DateTime.Now;
+    return recipeData;
+
+  }
+
   internal List<Recipe> GetAllRecipes()
   {
     string sql = @"
@@ -23,7 +43,7 @@ public class RecipesRepositories
     FROM recipes rec
     JOIN accounts creator ON creator.id = rec.creatorId
     ;";
-    List<Recipe> recipes = _db.Query<Recipe, Account, Recipe>(sql, (recipe, creator) =>
+    List<Recipe> recipes = _db.Query<Recipe, Profile, Recipe>(sql, (recipe, creator) =>
     {
       recipe.Creator = creator;
       return recipe;
@@ -41,7 +61,7 @@ public class RecipesRepositories
     JOIN accounts creator ON creator.id = rec.creatorId
     WHERE rec.id = @recipeId
     ;";
-    Recipe recipe = _db.Query<Recipe, Account, Recipe>(sql, (recipe, creator) =>
+    Recipe recipe = _db.Query<Recipe, Profile, Recipe>(sql, (recipe, creator) =>
     {
       recipe.Creator = creator;
       return recipe;

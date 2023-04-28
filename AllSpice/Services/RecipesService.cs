@@ -9,6 +9,12 @@ public class RecipesService
     _repo = repo;
   }
 
+  internal Recipe CreateRecipe(Recipe recipeData)
+  {
+    Recipe recipe = _repo.CreateRecipe(recipeData);
+    return recipe;
+  }
+
   internal List<Recipe> GetAllRecipes()
   {
     List<Recipe> recipes = _repo.GetAllRecipes();

@@ -19,6 +19,10 @@ CREATE TABLE recipes(
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8mb4 COMMENT '';
 
+ALTER TABLE recipes
+ADD COLUMN createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
 INSERT INTO recipes
 (title, instruction, img, category, creatorId)
 VALUES

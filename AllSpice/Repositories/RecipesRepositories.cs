@@ -18,20 +18,37 @@ public class RecipesRepositories
   {
     string sql = @"
     INSERT INTO recipes
-    (title, instruction, img, category, creatorId)
+    (title, instructions, img, category, creatorId)
     VALUES
-    (@Title, @Instruction, @Img, @Category, @CreatorId);
+    (@Title, @Instructions, @Img, @Category, @CreatorId);
 
     SELECT LAST_INSERT_ID()
     ;";
 
 
     int id = _db.ExecuteScalar<int>(sql, recipeData);
+
     recipeData.Id = id;
     recipeData.CreatedAt = DateTime.Now;
     recipeData.UpdatedAt = DateTime.Now;
     return recipeData;
 
+  }
+
+  internal void EditRecipe(Recipe originalRecipe)
+  {
+    string sql = @"
+    UPDATE recipes
+    SET
+    title = @Title,
+    instructions = @Instructions,
+    img = @Img,
+    category = @Category
+
+    WHERE id = @Id
+    ;";
+
+    _db.Execute(sql, originalRecipe);
   }
 
   internal List<Recipe> GetAllRecipes()
@@ -67,5 +84,11 @@ public class RecipesRepositories
       return recipe;
     }, new { recipeId }).FirstOrDefault();
     return recipe;
+  }
+
+  internal void RemoveRecipe(int recipeId)
+  {
+    string sql = "DELETE FROM recipes WHERE id = @recipeId;";
+    _db.Execute(sql, new { recipeId });
   }
 }

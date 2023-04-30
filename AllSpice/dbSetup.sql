@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS accounts(
 CREATE TABLE recipes(
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   title VARCHAR(50) NOT NULL,
-  instruction VARCHAR(1000) NOT NULL,
+  instructions VARCHAR(1000) NOT NULL,
   img VARCHAR(400) NOT NULL,
   category VARCHAR(50) NOT NULL,
   creatorId VARCHAR(255) NOT NULL,
@@ -24,7 +24,29 @@ ADD COLUMN createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
 ADD COLUMN updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
 INSERT INTO recipes
-(title, instruction, img, category, creatorId)
+(title, instructions, img, category, creatorId)
 VALUES
 ('Caprese Salad', 'Slice the cherry tomatoes in half and place them in a large bowl. Sprinkle with a little salt and drizzle with a bit of olive oil. Chiffonade the basil leaves into thin strips by stacking the basil leaves on top of each other, gently rolling it into a log and then slicing thinly into strips. Stir about ¾ of the basil into the tomatoes. Transfer tomatoes to a serving platter.', 'https://plus.unsplash.com/premium_photo-1677619680753-5407b8730d1c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fGNhcHJlc2UlMjBzYWxhZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60', 'Salads', '642db05b8ab8699ccab01f5b');
+
+
+CREATE TABLE ingredients(
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  quantity VARCHAR(100) NOT NULL,
+  recipeId INT NOT NULL,
+  creatorId VARCHAR(255) NOT NULL,
+
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8mb4 COMMENT '';
+
+CREATE TABLE favorites(
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  recipeId INT NOT NULL,
+  accountId VARCHAR(255) NOT NULL,
+
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE,
+  UNIQUE(recipeId, accountId)
+) default charset utf8mb4 COMMENT '';
 

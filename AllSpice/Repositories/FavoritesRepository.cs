@@ -18,22 +18,28 @@ public class FavoritesRepository
   {
     string sql = @"
     SELECT
-    rec.*,
     fav.*,
+    rec.*,
     creator.*
     FROM favorites fav
     JOIN recipes rec ON fav.recipeId = rec.id
     JOIN accounts creator ON rec.creatorId = creator.id
     WHERE fav.accountId = @userId
     ;";
-    List<MyFavorites> myFavorites = _db.Query<MyFavorites, Favorite, Profile, MyFavorites>(sql, (myFavorites, recipes, creator) =>
+    List<MyFavorites> recipes = _db.Query<Favorite, MyFavorites, Profile, MyFavorites>(sql, (myFavorites, recipes, creator) =>
     {
-      
-      myFavorites.FavoriteId = recipes.Id;
-      myFavorites.Creator = creator;
-      return myFavorites;
+      recipes.FavoriteId = myFavorites.Id;
+      recipes.Creator = creator;
+      return recipes;
     }, new { userId }).ToList();
-    return myFavorites;
+    return recipes;
+  }
+
+  internal Favorite GetOne(int id)
+  {
+    string sql = "SELECT * FROM favorites WHERE id = @id;";
+    Favorite favorite = _db.Query<Favorite>(sql, new { id }).FirstOrDefault();
+    return favorite;
   }
 
   internal Favorite MakeFavorite(Favorite favorData)
@@ -48,6 +54,12 @@ public class FavoritesRepository
     favorData.Id = id;
     return favorData;
     }
+
+  internal void RemoveFavorite(int id)
+  {
+    string sql = "DELETE FROM favorites WHERE id = @id;";
+    _db.Execute(sql, new { id });
   }
+}
 
 

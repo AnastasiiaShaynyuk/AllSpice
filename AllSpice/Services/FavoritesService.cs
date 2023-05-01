@@ -24,4 +24,22 @@ public class FavoritesService
     Favorite favorite = _repo.MakeFavorite(favorData);
     return favorite;
   }
+
+  internal Favorite GetOne(int id)
+  {
+    Favorite favorite = _repo.GetOne(id);
+    if (favorite == null)
+    {
+      throw new Exception("Try one more time");
+    }
+    return favorite;
+  }
+
+  internal string RemoveFavorite(int favoriteId, string userId)
+  {
+    Favorite favorite = GetOne(favoriteId);
+    if (favorite.AccountId != userId) throw new Exception("It is not yours");
+    _repo.RemoveFavorite(favoriteId);
+    return "Favorite recipe was removed!";
+  }
 }

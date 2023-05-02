@@ -1,11 +1,16 @@
 <template>
   <div class="container-fluid">
     <section class="row justify-content-center px-md-5 mt-5">
-      <div v-for="rec in recipes" class="col-md-4">
+      <div v-for="rec in recipes" :key="rec.id" class="col-md-4 trans">
         <RecipeCard :recipe="rec"/>
       </div>
     </section>
   </div>
+  <Modal id="activeRecipe">
+    <ActiveRecipe/>
+  </Modal>
+
+  <button class="btn-rounded" v-if="account.id" data-bs-toggle="modal" data-bs-target="#create-recipe"><i class="mdi mdi-plus fs-2 "></i></button>
 
 </template>
 
@@ -15,6 +20,8 @@ import {recipesService} from '../services/RecipesService'
 import { computed, onMounted } from "vue";
 import { AppState } from "../AppState";
 import RecipeCard from "../components/RecipeCard.vue";
+import Modal from "../components/Modal.vue";
+import ActiveRecipe from "../components/ActiveRecipe.vue";
 
 export default {
     setup() {
@@ -30,31 +37,29 @@ export default {
             getAllRecipes();
         });
         return {
-            recipes: computed(() => AppState.recipes)
+          recipes: computed(() => AppState.recipes),
+          account: computed(() => AppState.account)
         };
     },
-    components: { RecipeCard }
+    components: { RecipeCard, Modal, ActiveRecipe }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
+.trans {
+  transition: all 0.3s ease-in-out;
+}
+.trans:hover {
+  transform: scale(.9);
+  border-width: none;
+}
 
-  .home-card {
-    width: 50vw;
-
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
+.btn-rounded {
+  background-color: #527360;
+  height: 4em;
+  width: 4em;
+  border-radius: 50%;
+  border: none;
+  color: white;
 }
 </style>

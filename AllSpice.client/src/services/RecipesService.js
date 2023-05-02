@@ -9,7 +9,14 @@ class RecipesService {
     const res = await api.get('api/recipes')
     logger.log('getting all recipes', res.data)
     AppState.recipes = res.data.map(r => new Recipe(r))
-}
+  }
+  
+  async createRecipe(recipeData) {
+    const res = await api.post('api/recipes', recipeData)
+    logger.log('creating a recipe', res.data)
+    AppState.recipes.push(new Recipe(res.data))
+    return res.data
+  }
 }
 
 export const recipesService = new RecipesService()

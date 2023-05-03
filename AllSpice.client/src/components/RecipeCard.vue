@@ -1,5 +1,5 @@
 <template>
-  <div data-bs-toggle="modal" data-bs-target="#activeRecipe" class="card text-bg-dark my-2 elevation-4" @click="activeRecipe(recipe.id)">
+  <div data-bs-toggle="modal" data-bs-target="#activeRecipe" class="card text-bg-dark my-2 elevation-4" @click="setActiveRecipe(recipe.id)">
     <img :src="recipe.img" class="card-img" :alt="recipe.title">
     <div class="card-img-overlay d-flex flex-column justify-content-between">
       <div class="d-flex justify-content-between align-items-center">
@@ -10,9 +10,7 @@
       <!-- <p class="card-text"><small>Last updated 3 mins ago</small></p> -->
     </div>
   </div>
-  <Modal id="activeRecipe" size="modal-lg">
-    <ActiveRecipe/>
-  </Modal>
+
 </template>
 
 
@@ -21,7 +19,12 @@ import { computed } from "vue";
 import { Recipe } from "../models/Recipe";
 import { AppState } from "../AppState";
 import Modal from "./Modal.vue";
+import { recipesService } from "../services/RecipesService";
 import ActiveRecipe from "./ActiveRecipe.vue";
+
+
+
+
 
 export default {
     props: {
@@ -29,7 +32,16 @@ export default {
     },
     setup() {
         return {
-            recipes: computed(() => AppState.recipes)
+          account: computed(() => AppState.account),
+          activeRecipe: computed(() => AppState.activeRecipe),
+          async setActiveRecipe(recipeId) {
+              try {
+                await recipesService.setActiveRecipe(recipeId)
+              }
+              catch (error){
+                Pop.error(error);
+              }
+            }
         };
     },
     components: { Modal, ActiveRecipe }

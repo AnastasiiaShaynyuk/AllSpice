@@ -6,18 +6,16 @@
       </div>
     </section>
   </div>
-  <!-- <Modal id="activeRecipe">
-    <ActiveRecipe/>
-  </Modal> -->
 
   <button class="btn-rounded position-fixed elevation-4" v-if="account.id" data-bs-toggle="modal" data-bs-target="#create-recipe"><i class="mdi mdi-plus fs-2 "></i></button>
 
   <Modal id="create-recipe" size="modal-lg">
-    <template #header>Create Recipe</template>
-    <template #body>
       <RecipeForm />
-    </template>
   </Modal>
+
+  <Modal id="activeRecipe" size="modal-xl">
+        <ActiveRecipe />
+    </Modal>
 
 </template>
 
@@ -28,8 +26,9 @@ import { computed, onMounted } from "vue";
 import { AppState } from "../AppState";
 import RecipeCard from "../components/RecipeCard.vue";
 import Modal from "../components/Modal.vue";
-import ActiveRecipe from "../components/ActiveRecipe.vue";
+
 import RecipeForm from "../components/RecipeForm.vue";
+import ActiveRecipe from "../components/ActiveRecipe.vue";
 
 export default {
     setup() {
@@ -46,10 +45,11 @@ export default {
         });
         return {
           recipes: computed(() => AppState.recipes),
-          account: computed(() => AppState.account)
+          account: computed(() => AppState.account),
+          recipe: computed(() => AppState.ActiveRecipe)
         };
     },
-    components: { RecipeCard, Modal, ActiveRecipe, RecipeForm }
+    components: { RecipeCard, Modal, RecipeForm, ActiveRecipe }
 }
 </script>
 

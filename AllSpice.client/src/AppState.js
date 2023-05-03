@@ -9,4 +9,5 @@ export const AppState = reactive({
   recipes: [],
   /** @type {import('./models/Recipe.js').Recipe|null} */
   activeRecipe: null,
+  
 });

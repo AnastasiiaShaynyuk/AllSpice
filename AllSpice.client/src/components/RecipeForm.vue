@@ -1,5 +1,13 @@
 <template>
+  <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Create Recipe
+            </h1>
+            <button title="Close" type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
   <form @submit.prevent="createRecipe()">
+            <div class="modal-body text-dark">
     <div class="form-floating mb-3">
     <input type="text" class="form-control" id="title" placeholder="Title"  required v-model="editable.title"
           minlength="3" maxlength="25" />
@@ -35,6 +43,7 @@
         Create!
       </button>
     </div>
+    </div>
   </form>
 </template>
 
@@ -60,7 +69,7 @@ const imagePreview = ref(null);
       async createRecipe() {
         try {
           const recipeData = editable.value
-          logger.log(recipeData)
+          // logger.log(recipeData)
           const newRecipe = await recipesService.createRecipe(recipeData)
           Pop.toast('Successfully created a recipe', 'success', 'center')
           editable.value = {}
